@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zagreb Developers Drinkup</title>
+<meta name="description" content="Zajednički drinkup zagrebačkih developerskih meetup grupa. / A joint drinkup of Zagreb's developer meetup groups.">
+<meta property="og:title" content="Zagreb Developers Drinkup">
+<meta property="og:description" content="Zajednički drinkup zagrebačkih developerskih meetup grupa. / A joint drinkup of Zagreb's developer meetup groups.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#10428C">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --blue:      #10428C;
+  --blue-dark: #0A2C60;
+  --blue-tint: #EAF0F9;
+  --red:       #D6212B;
+  --ink:       #1C2430;
+  --muted:     #5C6878;
+  --band:      #F1F3F6;
+  --line:      #D8DDE4;
+  --white:     #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-family: "Barlow", "Segoe UI", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--blue); }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+}
+
+.shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 clamp(1.15rem, 4vw, 2.25rem);
+}
+
+/* ---------- language toggle bar ---------- */
+
+.topbar {
+  background: var(--blue-dark);
+  color: var(--white);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+}
+
+.topbar .shell {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 38px;
+}
+
+.topbar .sep {
+  color: rgba(255,255,255,0.3);
+}
+
+.langbtn {
+  appearance: none;
+  background: none;
+  border: 0;
+  color: rgba(255,255,255,0.62);
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.langbtn:hover {
+  color: var(--white);
+}
+
+.langbtn[aria-pressed="true"] {
+  color: var(--white);
+  background: rgba(255,255,255,0.14);
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  background: var(--blue);
+  color: var(--white);
+  padding: clamp(2.5rem, 6vw, 3.75rem) 0;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6.2vw, 3.1rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.masthead .tagline {
+  margin: 0.7rem 0 0;
+  max-width: 46ch;
+  font-size: clamp(1.02rem, 2.4vw, 1.24rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.88);
+}
+
+/* ---------- details strip ---------- */
+
+.details {
+  background: var(--blue-dark);
+  color: var(--white);
+}
+
+.details .shell {
+  display: grid;
+  gap: 0;
+  grid-template-columns: 1fr;
+}
+
+.detail {
+  padding: 1.6rem 0;
+  border-top: 1px solid rgba(255,255,255,0.16);
+}
+
+.detail .k {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.4rem;
+}
+
+.detail .v {
+  font-size: 1.14rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.detail .v a {
+  color: var(--white);
+  text-decoration-color: rgba(255,255,255,0.45);
+  text-underline-offset: 3px;
+}
+
+.detail .v a:hover {
+  text-decoration-color: var(--white);
+}
+
+.detail .sub {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.68);
+  margin-top: 0.15rem;
+}
+
+@media (min-width: 700px) {
+  .details .shell { grid-template-columns: repeat(3, 1fr); }
+  .detail { padding: 1.85rem 1.75rem 1.85rem 0; border-top: 0; }
+  .detail + .detail { border-left: 1px solid rgba(255,255,255,0.16); padding-left: 1.75rem; }
+}
+
+/* ---------- section headings ---------- */
+
+.section {
+  padding: clamp(2.75rem, 6vw, 4rem) 0;
+}
+
+.secthead {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0 0 1.75rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 3px solid var(--blue);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.secthead .tally {
+  margin-left: auto;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+/* ---------- group tiles ---------- */
+
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  grid-template-columns: 1fr;
+}
+
+.tile {
+  display: block;
+  height: 100%;
+  background: var(--white);
+  padding: 1.4rem 1.35rem;
+  text-decoration: none;
+  color: inherit;
+  border-left: 4px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.tile:hover,
+.tile:focus-visible {
+  background: var(--blue-tint);
+  border-left-color: var(--red);
+}
+
+.tile .nm {
+  display: block;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.28;
+  color: var(--blue);
+}
+
+.tile .hostname {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.83rem;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+@media (min-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 860px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- feedback band ---------- */
+
+.feedback {
+  background: var(--band);
+  border-top: 4px solid var(--red);
+  padding: clamp(2rem, 5vw, 2.75rem) 0;
+}
+
+.feedback .shell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2rem;
+}
+
+.feedback .copy { flex: 1 1 24rem; }
+
+.feedback h2 {
+  margin: 0 0 0.3rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.feedback p {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--muted);
+}
+
+.cta {
+  display: inline-block;
+  background: var(--red);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1.6rem;
+  border-bottom: 3px solid rgba(0,0,0,0.22);
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.cta:hover { background: #B3161F; }
+
+/* ---------- footer band ---------- */
+
+.foot {
+  background: var(--blue-dark);
+  min-height: 90px;
+}
+
+/* ---------- bilingual switching ---------- */
+
+body[data-lang="hr"] [lang="en"] { display: none; }
+body[data-lang="en"] [lang="hr"] { display: none; }
+</style>
+</head>
+
+<body data-lang="hr">
+
+<div class="topbar">
+  <div class="shell">
+    <button class="langbtn" type="button" data-set="hr" aria-pressed="true">HR</button>
+    <span class="sep" aria-hidden="true">|</span>
+    <button class="langbtn" type="button" data-set="en" aria-pressed="false">EN</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="shell">
+    <h1>Zagreb Developers Drinkup</h1>
+    <p class="tagline" lang="hr">Godišnji ljetni drinkup zagrebačkih meetup grupa</p>
+    <p class="tagline" lang="en">The annual summer drinkup of Zagreb's developer meetup groups</p>
+  </div>
+</header>
+
+<section class="details" id="details" aria-label="Detalji / Details"></section>
+
+<section class="section">
+  <div class="shell">
+    <h2 class="secthead">
+      <span lang="hr">Grupe koje sudjeluju</span>
+      <span lang="en">Participating groups</span>
+      <span class="tally" id="tally"></span>
+    </h2>
+    <ul class="tiles" id="tiles"></ul>
+  </div>
+</section>
+
+<section class="feedback" id="feedback" hidden>
+  <div class="shell">
+    <div class="copy">
+      <h2 lang="hr">Ispunite kratku anketu</h2>
+      <h2 lang="en">Fill out a short survey</h2>
+      <p lang="hr">Pomaže nam da sljedeći drinkup bude bolji.</p>
+      <p lang="en">It helps us make the next drinkup better.</p>
+    </div>
+    <a class="cta" id="feedback-link" href="#">
+      <span lang="hr">Otvori anketu</span>
+      <span lang="en">Open the form</span>
+    </a>
+  </div>
+</section>
+
+<footer class="foot" aria-hidden="true"></footer>
+
+<!--
+  ============================================================
+  EDIT BELOW THIS LINE. Everything above is layout.
+
+  - event: update date, time, venue and map link for each edition.
+    If the next date isn't set yet, use  "event": {}  and the page
+    will say so instead of showing a stale date.
+  - groups: add or remove entries, keep them alphabetical.
+    Nobody removes their own group — one identical list for everyone.
+  - feedback: the survey URL. Set it to "" to hide the survey band.
+
+  Valid JSON: double quotes, no trailing commas, no comments.
+  ============================================================
+-->
+<script type="application/json" id="data">
+{
+  "event": {
+    "date_hr": "Petak, 28. kolovoza 2026.",
+    "date_en": "Friday, 28 August 2026",
+    "time_hr": "18:00 – ponoć",
+    "time_en": "18:00 – midnight",
+    "venue": "Zmajska Pivovara \"SIP\"",
+    "address": "Trnjanska cesta 111a, Zagreb",
+    "map": "https://maps.app.goo.gl/zHcCyEyGsi5VBwPV9"
+  },
+
+  "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSd_ktSTxR6XtNzKKEKYTvToHbWjTQ88VPZ6xjxjFqaIyzHdBQ/viewform",
+
+  "groups": [
+    { "name": "Elixir Zagreb",                 "url": "https://lu.ma/elixirzg" },
+    { "name": "Golang ZG",                     "url": "https://www.meetup.com/golang-zg/" },
+    { "name": "Google Developer Group Zagreb", "url": "https://gdg.community.dev/gdg-zagreb/" },
+    { "name": "JavaScript Zagreb",             "url": "https://www.meetup.com/javascript-zagreb/" },
+    { "name": "Python Hrvatska",               "url": "https://www.meetup.com/python-hrvatska/" },
+    { "name": "RubyZG",                        "url": "https://www.meetup.com/rubyzg/" },
+    { "name": "ZgPHP",                         "url": "https://www.meetup.com/ZgPHP-meetup/" }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  var data   = JSON.parse(document.getElementById("data").textContent);
+  var ev     = data.event  || {};
+  var groups = data.groups || [];
+
+  var COPY = {
+    when:  { hr: "Kada", en: "When" },
+    where: { hr: "Gdje", en: "Where" },
+    who:   { hr: "Tko",  en: "Who" },
+    tbd:   { hr: "Termin još nije objavljen", en: "Date to be announced" },
+    open:  { hr: "svi developeri dobrodošli", en: "all developers welcome" },
+    count: {
+      hr: function (n) { return n + (n === 1 ? " grupa" : n < 5 ? " grupe" : " grupa"); },
+      en: function (n) { return n + (n === 1 ? " group" : " groups"); }
+    }
+  };
+
+  function bi(tag, key, cls) {
+    var frag = document.createDocumentFragment();
+    ["hr", "en"].forEach(function (l) {
+      var el = document.createElement(tag);
+      el.setAttribute("lang", l);
+      if (cls) el.className = cls;
+      el.textContent = typeof key === "function" ? key(l) : COPY[key][l];
+      frag.appendChild(el);
+    });
+    return frag;
+  }
+
+  function detail(labelKey, build) {
+    var d = document.createElement("div");
+    d.className = "detail";
+    d.appendChild(bi("span", labelKey, "k"));
+    var v = document.createElement("div");
+    v.className = "v";
+    build(v);
+    d.appendChild(v);
+    return d;
+  }
+
+  // --- details strip ---
+  var strip = document.createElement("div");
+  strip.className = "shell";
+
+  if (ev.date_hr) {
+    strip.appendChild(detail("when", function (v) {
+      v.appendChild(bi("span", function (l) { return ev["date_" + l]; }));
+      v.appendChild(bi("span", function (l) { return ev["time_" + l] || ev.time || ""; }, "sub"));
+    }));
+  } else {
+    strip.appendChild(detail("when", function (v) { v.appendChild(bi("span", "tbd")); }));
+  }
+
+  if (ev.venue) {
+    strip.appendChild(detail("where", function (v) {
+      var node = document.createTextNode(ev.venue);
+      if (ev.map) {
+        var a = document.createElement("a");
+        a.href = ev.map;
+        a.appendChild(node);
+        v.appendChild(a);
+      } else {
+        v.appendChild(node);
+      }
+      if (ev.address) {
+        var s = document.createElement("span");
+        s.className = "sub";
+        s.textContent = ev.address;
+        v.appendChild(s);
+      }
+    }));
+  }
+
+  strip.appendChild(detail("who", function (v) {
+    v.appendChild(bi("span", function (l) { return COPY.count[l](groups.length); }));
+    v.appendChild(bi("span", "open", "sub"));
+  }));
+
+  document.getElementById("details").appendChild(strip);
+
+  // --- group tiles ---
+  var tiles = document.getElementById("tiles");
+  groups.forEach(function (g) {
+    var li = document.createElement("li");
+    var a  = document.createElement("a");
+    a.className = "tile";
+    a.href = g.url;
+
+    var nm = document.createElement("span");
+    nm.className = "nm";
+    nm.textContent = g.name;
+
+    var hn = document.createElement("span");
+    hn.className = "hostname";
+    try {
+      var u = new URL(g.url);
+      hn.textContent = (u.hostname + u.pathname).replace(/^www\./, "").replace(/\/$/, "");
+    } catch (e) {
+      hn.textContent = g.url;
+    }
+
+    a.appendChild(nm);
+    a.appendChild(hn);
+    li.appendChild(a);
+    tiles.appendChild(li);
+  });
+
+  document.getElementById("tally").appendChild(
+    bi("span", function (l) { return COPY.count[l](groups.length); })
+  );
+
+  // --- survey band (shown only when a URL is set) ---
+  if (data.feedback) {
+    document.getElementById("feedback-link").href = data.feedback;
+    document.getElementById("feedback").hidden = false;
+  }
+
+  // --- language toggle ---
+  var buttons = document.querySelectorAll(".langbtn");
+
+  function setLang(l) {
+    document.body.setAttribute("data-lang", l);
+    document.documentElement.setAttribute("lang", l);
+    buttons.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.set === l));
+    });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.dataset.set); });
+  });
+
+  if ((navigator.language || "").slice(0, 2).toLowerCase() !== "hr") setLang("en");
+})();
+</script>
+</body>
+</html>
