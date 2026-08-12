@@ -8,6 +8,12 @@
 <meta property="og:title" content="Zagreb Developers Drinkup">
 <meta property="og:description" content="Zajednički drinkup zagrebačkih developerskih meetup grupa. / A joint drinkup of Zagreb's developer meetup groups.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://zagreb-developers.github.io/drinkup/">
+<meta property="og:image" content="https://zagreb-developers.github.io/drinkup/event_cover_image.jpeg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="853">
+<meta property="og:image:alt" content="Zagreb Developers Meetup — photo collage from past drinkups">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#10428C">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -209,6 +215,19 @@ button:focus-visible {
   color: var(--muted);
 }
 
+/* ---------- cover image halves ---------- */
+
+.cover-half {
+  aspect-ratio: 2560 / 853;
+  background: url("event_cover_image.jpeg") center top / 100% auto no-repeat;
+  margin-bottom: 1rem;
+}
+
+.cover-half.bottom {
+  background-position: center bottom;
+  margin: 1rem 0 0;
+}
+
 /* ---------- group tiles ---------- */
 
 .tiles {
@@ -344,7 +363,12 @@ body[data-lang="en"] [lang="hr"] { display: none; }
       <span lang="en">Participating groups</span>
       <span class="tally" id="tally"></span>
     </h2>
+    <div class="cover-half top" id="cover-top" role="img"
+         aria-label="Zagreb Developers Meetup — kolaž fotografija s prošlih drinkupa"
+         data-alt-hr="Zagreb Developers Meetup — kolaž fotografija s prošlih drinkupa"
+         data-alt-en="Zagreb Developers Meetup — photo collage from past drinkups"></div>
     <ul class="tiles" id="tiles"></ul>
+    <div class="cover-half bottom" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -532,6 +556,10 @@ body[data-lang="en"] [lang="hr"] { display: none; }
   function setLang(l) {
     document.body.setAttribute("data-lang", l);
     document.documentElement.setAttribute("lang", l);
+    var cover = document.getElementById("cover-top");
+    if (cover) {
+      cover.setAttribute("aria-label", cover.getAttribute("data-alt-" + l) || "");
+    }
     buttons.forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.dataset.set === l));
     });
