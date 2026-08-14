@@ -336,18 +336,21 @@ def download_logos(results):
         r["logo_file"] = os.path.relpath(path, ROOT)
 
 
+GROUP_FIELDS = ("name", "url", "logo", "event")
+
+
 def render_groups(groups):
     """Re-emit the groups array. Same input always produces the same bytes."""
     lines = []
     for i, g in enumerate(groups):
         tail = "" if i == len(groups) - 1 else ","
-        if g.get("logo"):
-            lines.append('    { "name": %s,' % json.dumps(g["name"]))
-            lines.append('      "url":  %s,' % json.dumps(g["url"]))
-            lines.append('      "logo": %s }%s' % (json.dumps(g["logo"]), tail))
-        else:
-            lines.append('    { "name": %s,' % json.dumps(g["name"]))
-            lines.append('      "url":  %s }%s' % (json.dumps(g["url"]), tail))
+        fields = [(k, g[k]) for k in GROUP_FIELDS if g.get(k)]
+        width = max(len('"%s":' % k) for k, _ in fields)
+        for j, (key, value) in enumerate(fields):
+            open_brace = "    { " if j == 0 else "      "
+            close = " }" + tail if j == len(fields) - 1 else ","
+            lines.append("%s%-*s %s%s" % (open_brace, width, '"%s":' % key,
+                                          json.dumps(value), close))
     return "\n".join(lines)
 
 
@@ -356,10 +359,20 @@ def patch_index(html, groups, results):
     updated = []
     for g in groups:
         entry = {"name": g["name"], "url": g["url"]}
+        result = by_name.get(g["name"], {})
+
         # Keep the previous logo when this run could not find one.
-        logo = (by_name.get(g["name"], {}).get("logo_url")) or g.get("logo")
+        logo = result.get("logo_url") or g.get("logo")
         if logo:
             entry["logo"] = logo
+
+        # Only a confirmed upcoming event earns a link. A group that has since
+        # unpublished loses it — except after an error, where we know nothing.
+        if result.get("status") == PUBLISHED:
+            entry["event"] = result["event_url"]
+        elif result.get("status") == ERROR and g.get("event"):
+            entry["event"] = g["event"]
+
         updated.append(entry)
 
     m = re.search(r'(\n  "groups": \[\n)(.*?)(\n  \]\n)', html, re.S)

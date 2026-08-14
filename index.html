@@ -242,20 +242,50 @@ button:focus-visible {
 }
 
 .tile {
-  display: block;
+  display: flex;
+  align-items: stretch;
   height: 100%;
   background: var(--white);
-  padding: 1.4rem 1.35rem;
-  text-decoration: none;
-  color: inherit;
   border-left: 4px solid transparent;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .tile:hover,
-.tile:focus-visible {
+.tile:focus-within {
   background: var(--blue-tint);
   border-left-color: var(--red);
+}
+
+/* Translucent, so the strip darkens whatever the tile behind it is doing. */
+.tile .logobox {
+  flex: none;
+  width: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(16, 66, 140, 0.05);
+  border-right: 1px solid var(--line);
+}
+
+.tile .logo {
+  width: 100%;
+  max-height: 60px;
+  object-fit: contain;
+}
+
+.tile .body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.15rem 1.25rem;
+}
+
+.tile .main {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
 }
 
 .tile .nm {
@@ -273,6 +303,24 @@ button:focus-visible {
   color: var(--muted);
   word-break: break-word;
 }
+
+.tile .ev {
+  align-self: flex-start;
+  margin-top: 0.85rem;
+  font-size: 0.87rem;
+  font-weight: 600;
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.tile .ev::after {
+  content: " \2192";
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.tile .ev:hover { color: var(--red); }
+.tile .ev:hover::after { transform: translateX(3px); }
 
 @media (min-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 860px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
@@ -396,7 +444,9 @@ body[data-lang="en"] [lang="hr"] { display: none; }
   - event: update date, time, venue and map link for each edition.
     If the next date isn't set yet, use  "event": {}  and the page
     will say so instead of showing a stale date.
-  - groups: add or remove entries, keep them alphabetical.
+  - groups: add or remove entries, keep them alphabetical. Only "name"
+    and "url" are written by hand — "logo" and "event" are filled in by
+    check_groups.py, which also reports who has posted.
     Nobody removes their own group — one identical list for everyone.
   - feedback: the survey URL. Set it to "" to hide the survey band.
 
@@ -418,12 +468,14 @@ body[data-lang="en"] [lang="hr"] { display: none; }
   "feedback": "https://docs.google.com/forms/d/e/1FAIpQLSd_ktSTxR6XtNzKKEKYTvToHbWjTQ88VPZ6xjxjFqaIyzHdBQ/viewform",
 
   "groups": [
-    { "name": "Elixir Zagreb",
-      "url":  "https://lu.ma/elixirzg",
-      "logo": "https://images.lumacdn.com/calendars/db/e3db5715-488c-422c-ada6-1a56a61a1faa" },
-    { "name": "Golang ZG",
-      "url":  "https://www.meetup.com/golang-zg/",
-      "logo": "https://secure.meetupstatic.com/photos/event/7/2/5/2/600_462749266.webp" },
+    { "name":  "Elixir Zagreb",
+      "url":   "https://lu.ma/elixirzg",
+      "logo":  "https://images.lumacdn.com/calendars/db/e3db5715-488c-422c-ada6-1a56a61a1faa",
+      "event": "https://lu.ma/5q5m7f02" },
+    { "name":  "Golang ZG",
+      "url":   "https://www.meetup.com/golang-zg/",
+      "logo":  "https://secure.meetupstatic.com/photos/event/7/2/5/2/600_462749266.webp",
+      "event": "https://www.meetup.com/golang-zg/events/316072304/" },
     { "name": "Google Developer Group Zagreb",
       "url":  "https://gdg.community.dev/gdg-zagreb/",
       "logo": "https://res.cloudinary.com/startup-grind/image/upload/c_fill,w_500,h_500,g_center/c_fill,dpr_2.0,f_auto,g_center,q_auto:good/v1/gcs/platform-data-goog/contentbuilder/GDG_Bevy_DefaultChapterThumbnail_5oO1cMY.png" },
@@ -433,18 +485,21 @@ body[data-lang="en"] [lang="hr"] { display: none; }
     { "name": "Python Hrvatska",
       "url":  "https://www.meetup.com/python-hrvatska/",
       "logo": "https://secure.meetupstatic.com/photos/event/7/0/8/5/600_485908805.webp" },
-    { "name": "RubyZG",
-      "url":  "https://www.meetup.com/rubyzg/",
-      "logo": "https://secure.meetupstatic.com/photos/event/3/2/3/5/600_517452853.webp" },
-    { "name": "Testival",
-      "url":  "https://www.meetup.com/testival/",
-      "logo": "https://secure.meetupstatic.com/photos/event/b/a/2/6/600_504647654.webp" },
+    { "name":  "RubyZG",
+      "url":   "https://www.meetup.com/rubyzg/",
+      "logo":  "https://secure.meetupstatic.com/photos/event/3/2/3/5/600_517452853.webp",
+      "event": "https://www.meetup.com/rubyzg/events/316045636/" },
+    { "name":  "Testival",
+      "url":   "https://www.meetup.com/testival/",
+      "logo":  "https://secure.meetupstatic.com/photos/event/b/a/2/6/600_504647654.webp",
+      "event": "https://www.meetup.com/testival/events/316073255/" },
     { "name": "ZgPHP",
       "url":  "https://www.zg-php.org/",
       "logo": "https://cdn2.domdesign.com/users/ZgPHP/Site/sites/zg-php.org/favicon.svg" },
-    { "name": "Zagreb Sofware Crafters",
-      "url":  "https://www.meetup.com/zagreb-software-crafters/",
-      "logo": "https://secure.meetupstatic.com/photos/event/8/f/5/4/600_532896692.webp" },
+    { "name":  "Zagreb Sofware Crafters",
+      "url":   "https://www.meetup.com/zagreb-software-crafters/",
+      "logo":  "https://secure.meetupstatic.com/photos/event/8/f/5/4/600_532896692.webp",
+      "event": "https://www.meetup.com/zagreb-software-crafters/events/316074793/" },
     { "name": "Karlovac Developers",
       "url":  "https://www.meetup.com/karlovac-developers-meetup/",
       "logo": "https://secure.meetupstatic.com/photos/event/5/c/e/0/600_511523776.webp" }
@@ -464,6 +519,7 @@ body[data-lang="en"] [lang="hr"] { display: none; }
     who:   { hr: "Tko",  en: "Who" },
     tbd:   { hr: "Termin još nije objavljen", en: "Date to be announced" },
     open:  { hr: "svi developeri dobrodošli", en: "all developers welcome" },
+    viewEvent: { hr: "Pogledaj event", en: "View event" },
     count: {
       hr: function (n) { return n + (n === 1 ? " grupa" : n < 5 ? " grupe" : " grupa"); },
       en: function (n) { return n + (n === 1 ? " group" : " groups"); }
@@ -537,8 +593,33 @@ body[data-lang="en"] [lang="hr"] { display: none; }
   var tiles = document.getElementById("tiles");
   groups.forEach(function (g) {
     var li = document.createElement("li");
-    var a  = document.createElement("a");
-    a.className = "tile";
+    li.className = "tile";
+
+    if (g.logo) {
+      // Second link to the same place as the name — hidden from tab order and
+      // screen readers so it isn't announced twice.
+      var box = document.createElement("a");
+      box.className = "logobox";
+      box.href = g.url;
+      box.tabIndex = -1;
+      box.setAttribute("aria-hidden", "true");
+
+      var img = document.createElement("img");
+      img.className = "logo";
+      img.src = g.logo;
+      img.alt = "";
+      img.loading = "lazy";
+      img.onerror = function () { box.remove(); };
+
+      box.appendChild(img);
+      li.appendChild(box);
+    }
+
+    var body = document.createElement("div");
+    body.className = "body";
+
+    var a = document.createElement("a");
+    a.className = "main";
     a.href = g.url;
 
     var nm = document.createElement("span");
@@ -556,7 +637,17 @@ body[data-lang="en"] [lang="hr"] { display: none; }
 
     a.appendChild(nm);
     a.appendChild(hn);
-    li.appendChild(a);
+    body.appendChild(a);
+
+    if (g.event) {
+      var evLink = document.createElement("a");
+      evLink.className = "ev";
+      evLink.href = g.event;
+      evLink.appendChild(bi("span", "viewEvent"));
+      body.appendChild(evLink);
+    }
+
+    li.appendChild(body);
     tiles.appendChild(li);
   });
 

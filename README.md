@@ -29,7 +29,7 @@ Edit the JSON block at the bottom of `index.html` and open a pull request:
   "url":  "https://www.meetup.com/your-group/" },
 ```
 
-Keep the list alphabetical. It's valid JSON — double quotes, no trailing commas. Leave `logo` out; `check_groups.py` fills it in.
+Keep the list alphabetical. It's valid JSON — double quotes, no trailing commas. Write only `name` and `url`; `check_groups.py` fills in `logo` and `event`.
 
 Groups that sit an edition out get removed for that edition and added back later. Nobody removes their own group from the list: every group posts the same text and links to the same complete list.
 
@@ -61,7 +61,9 @@ Python 3, standard library only — nothing to install. It reads the group list 
 
 `unknown` means the script couldn't tell — check that group by hand. ZgPHP is always `unknown` because its site renders in the browser and there's nothing to read in the HTML.
 
-Every run also downloads each group's logo into `logos/`, writes `drinkup-report.json` (gitignored), and adds a `"logo"` URL to each group in `index.html`. Nothing on the page changes — the field is there for whenever we want to show logos. Re-running with the same results leaves `index.html` untouched.
+Every run also downloads each group's logo into `logos/`, writes `drinkup-report.json` (gitignored), and updates two fields per group in `index.html`: `logo` and, for groups that have posted, `event`. The page shows the logo in each tile and a "Pogledaj event / View event" link on the groups that have posted. Re-running with the same results leaves `index.html` untouched.
+
+A group that stops being published loses its `event` link on the next run, so the page never points at a dead event. After a fetch error the previous values are kept, since a failed check proves nothing.
 
 | Flag | |
 |---|---|
