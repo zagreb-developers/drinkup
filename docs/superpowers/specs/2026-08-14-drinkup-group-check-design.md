@@ -128,3 +128,13 @@ that a second run leaves `index.html` byte-identical.
 No unit test suite. The script is a thin shell around live HTML whose shape is
 the thing most likely to change; tests against captured fixtures would pass while
 the real thing broke.
+
+**Verified 2026-08-14:** 5 published (Elixir Zagreb, Golang ZG, RubyZG, Testival,
+Zagreb Software Crafters), 4 not posted, ZgPHP `unknown`, 0 errors. All ten logos
+downloaded as valid images. A second run left `index.html` byte-identical.
+
+One thing the probes did not predict: what a platform calls the group logo is
+sometimes a photo. Golang ZG and Testival serve real logos; RubyZG's Meetup group
+photo is a crowd shot from a past meetup, and GDG Zagreb has never replaced the
+platform's default chapter thumbnail. The script collects what each platform
+serves, which is the most it can do.
