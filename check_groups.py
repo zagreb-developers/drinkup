@@ -225,16 +225,50 @@ def adapter_gdg(url):
     return events, logo or meta_content(html, "og:image"), True
 
 
+# A group on its own domain usually still runs its events on a platform, and
+# links to it. Following that link gets us real dates instead of a text guess.
+PLATFORM_LINKS = [
+    (re.compile(r'https?://(?:www\.)?meetup\.com/([A-Za-z0-9][A-Za-z0-9_-]*)', re.I),
+     "https://www.meetup.com/%s/"),
+    (re.compile(r'https?://lu\.ma/([A-Za-z0-9][A-Za-z0-9_-]*)', re.I),
+     "https://lu.ma/%s"),
+    (re.compile(r'https?://gdg\.community\.dev/([A-Za-z0-9][A-Za-z0-9_-]*)', re.I),
+     "https://gdg.community.dev/%s/"),
+]
+
+# Meetup paths that are site chrome rather than a group.
+NOT_A_GROUP = {"find", "pro", "help", "about", "members", "topics", "cities", "blog", "home"}
+
+
+def linked_platform_url(html):
+    """The group page of the first event platform this page links to, if any."""
+    for pattern, template in PLATFORM_LINKS:
+        for m in pattern.finditer(html):
+            slug = m.group(1)
+            if slug.lower() in NOT_A_GROUP:
+                continue
+            return template % slug
+    return None
+
+
 def adapter_generic(url):
     """Fallback: no structured events, so read the page text and stay honest about it."""
     html, final_url = fetch_html(url)
-    text = visible_text(html)
 
     logo = meta_content(html, "og:image")
     if not logo:
         icon = icon_href(html)
         logo = urljoin(final_url, icon) if icon else None
 
+    linked = linked_platform_url(html)
+    if linked and (urlparse(linked).hostname or "").lower() != (urlparse(final_url).hostname or "").lower():
+        delegate = adapter_for(linked)
+        if delegate is not adapter_generic:
+            events, platform_logo, dated = delegate(linked)
+            # The group's own site is the better source for its logo.
+            return events, logo or platform_logo, dated
+
+    text = visible_text(html)
     events = [{"title": "", "description": text, "url": final_url, "starts_at": None}] if text else []
     return events, logo, False
 

@@ -41,7 +41,7 @@ failure output readable; concurrency would buy nothing here.
 | `meetup.com` | fetch `<url>events/`, parse `<script id="__NEXT_DATA__">`, take `props.pageProps.__APOLLO_STATE__` entries keyed `Event:*` (`title`, `description`, `dateTime`, `eventUrl`) | JSON-LD `Organization.logo`, fallback `og:image` |
 | `lu.ma` | `__NEXT_DATA__`, collect objects with `name` + `start_at`; event URL is `https://lu.ma/<url>` | `og:image` |
 | `gdg.community.dev` | `__NEXT_DATA__` → `props.pageProps.chapterData.upcomingEvents` | `chapterData` picture/logo field, fallback `og:image` |
-| anything else | strip tags from the response body, search the visible text | `og:image`, fallback `<link rel="icon">` |
+| anything else | follow the first Meetup/Luma/GDG link on the page and use that adapter; if there is none, strip tags and search the visible text | `og:image`, fallback `<link rel="icon">` |
 
 Adapters are independent functions behind one signature. When a platform changes
 its markup, exactly one function changes, and the others keep working.
@@ -60,6 +60,12 @@ history contains "RubyZG July Drinkup" and "December drinkup @ Fakin Craft Bar".
 On Meetup, Luma and GDG the adapter has real dates and filters those out. The
 generic adapter has no dates, so a hit there is reported for a human to check
 rather than counted as published.
+
+A group on its own domain is the case the text fallback handles worst, and it
+is the one most likely to recur as groups move off Meetup. Such a site almost
+always still links to the platform it runs events on, so the generic adapter
+follows that link and delegates, keeping the group's own logo. RubyZG moved to
+`rubyzg.org` on 2026-08-14 and this is what keeps its event link working.
 
 `www.zg-php.org` serves a 1.7 KB JavaScript shell with an empty `<body>` — its
 content is rendered client-side. It will report `unknown` on every run, and its
