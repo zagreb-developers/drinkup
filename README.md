@@ -7,11 +7,12 @@ Site: **https://zagreb-developers.github.io/drinkup/** — this is the only URL 
 ## Repo
 
 ```
-index.html               the site + the group list (inline JSON near the bottom)
-announcement.txt         Croatian and English announcement
-event_cover_image.jpeg   cover image (on the page and in social link previews)
-check_groups.py          checks who has posted, collects group logos
-logos/                   group logos, downloaded by the script
+index.html                the site + the group list (inline JSON near the bottom)
+announcement.txt          Croatian and English announcement
+event_cover_image.jpeg    cover image (on the page and in social link previews)
+scripts/check_groups.py   checks who has posted, collects group logos
+logos/                    group logos, downloaded by the script
+docs/                     design notes, not needed to run an edition
 ```
 
 No build step. GitHub Pages serves the repo root from `main`.
@@ -29,7 +30,7 @@ Edit the JSON block at the bottom of `index.html` and open a pull request:
   "url":  "https://www.meetup.com/your-group/" },
 ```
 
-Keep the list alphabetical. It's valid JSON — double quotes, no trailing commas. Write only `name` and `url`; `check_groups.py` fills in `logo` and `event`.
+Keep the list alphabetical. It's valid JSON — double quotes, no trailing commas. Write only `name` and `url`; `scripts/check_groups.py` fills in `logo` and `event`.
 
 Groups that sit an edition out get removed for that edition and added back later. Nobody removes their own group from the list: every group posts the same text and links to the same complete list.
 
@@ -38,14 +39,15 @@ Groups that sit an edition out get removed for that edition and added back later
 1. Update `event` in `index.html` — date, time, venue, map link. If the date isn't set yet, empty the object (`"event": {}`) and the page says so instead of showing a stale date.
 2. Update the date and venue lines in both languages in `announcement.txt`. Nothing else in it should need changing — the group list isn't in the text, only the link.
 3. Freeze the lineup about a week out, then tell all groups to post.
-4. Run `python3 check_groups.py` to see who actually posted, and chase the rest.
+4. Run `python3 scripts/check_groups.py` to see who actually posted, and chase the rest.
+5. Point `feedback` in `index.html` at this edition's survey, or set it to `""` to hide the survey band.
 
 `announcement.txt` contains only pasteable text, no comments or instructions — anything in there might end up in a Meetup post.
 
 ## Checking who posted
 
 ```
-python3 check_groups.py
+python3 scripts/check_groups.py
 ```
 
 Python 3, standard library only — nothing to install. It reads the group list from `index.html`, opens every group page, and looks for an upcoming event mentioning "drinkup":
@@ -63,7 +65,9 @@ Python 3, standard library only — nothing to install. It reads the group list 
 
 A group listed under its own domain rather than a platform (RubyZG, at `rubyzg.org`) still works: the script follows the Meetup, Luma or GDG link on that site and reads the events there, so the tile links to the real event while the group link and logo stay on their own site.
 
-Every run also downloads each group's logo into `logos/`, writes `drinkup-report.json` (gitignored), and updates two fields per group in `index.html`: `logo` and, for groups that have posted, `event`. The page shows the logo in each tile and a "Pogledaj event / View event" link on the groups that have posted. Re-running with the same results leaves `index.html` untouched.
+Every run also writes `drinkup-report.json` (gitignored) and updates two fields per group in `index.html`: `logo` and, for groups that have posted, `event`. The page shows the logo in each tile and a "Pogledaj event / View event" link on the groups that have posted. Re-running with the same results leaves `index.html` untouched.
+
+Logos are also saved into `logos/` as a local copy for posters and slides — the page itself loads each logo straight from the platform URL in `index.html`, not from that folder.
 
 A group that stops being published loses its `event` link on the next run, so the page never points at a dead event. After a fetch error the previous values are kept, since a failed check proves nothing.
 

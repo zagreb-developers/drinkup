@@ -8,8 +8,8 @@ console table, downloads logos into logos/, writes drinkup-report.json, and adds
 
 Standard library only. Run it from anywhere:
 
-    python3 check_groups.py
-    python3 check_groups.py --keyword drinkup --no-patch
+    python3 scripts/check_groups.py
+    python3 scripts/check_groups.py --keyword drinkup --no-patch
 """
 
 import argparse
@@ -24,7 +24,8 @@ from datetime import datetime, timezone
 from html import unescape
 from urllib.parse import urljoin, urlparse
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+# The repo root, one level up from scripts/ — every path below is relative to it.
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX = os.path.join(ROOT, "index.html")
 LOGO_DIR = os.path.join(ROOT, "logos")
 
