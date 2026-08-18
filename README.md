@@ -78,4 +78,4 @@ A group that stops being published loses its `event` link on the next run, so th
 | `--no-patch` | leave `index.html` alone |
 | `--json PATH` | write the report somewhere else |
 
-The logo is whatever each platform serves as the group image, so quality varies — some groups have set a real logo, others a photo from a past meetup.
+The logo is whatever each platform serves as the group image, so quality varies — some groups have set a real logo, others a photo from a past meetup. For a group on its own domain the script takes the site icon rather than the `og:image`, which is usually a wide share banner that would shrink to nothing in the tile.

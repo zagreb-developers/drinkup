@@ -256,10 +256,11 @@ def adapter_generic(url):
     """Fallback: no structured events, so read the page text and stay honest about it."""
     html, final_url = fetch_html(url)
 
-    logo = meta_content(html, "og:image")
-    if not logo:
-        icon = icon_href(html)
-        logo = urljoin(final_url, icon) if icon else None
+    # On a group's own site the app icon is the group mark, square and sized for
+    # a small box. og:image is a share banner — often a wide lockup that shrinks
+    # to nothing in the tile — so it is only the fallback here.
+    icon = icon_href(html)
+    logo = urljoin(final_url, icon) if icon else meta_content(html, "og:image")
 
     linked = linked_platform_url(html)
     if linked and (urlparse(linked).hostname or "").lower() != (urlparse(final_url).hostname or "").lower():
